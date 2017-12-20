@@ -36,6 +36,17 @@ macro(force_option option value)
 endmacro()
 
 ##
+#  @brief adds a subdirectory if we are the CMAKE_SOURCE_DIR
+#
+#  @param dir  The directory location.
+#
+macro(add_subdirectory_safe dir)
+  if(${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
+    add_subdirectory(${dir})
+  endif()
+endmacro()
+
+##
 #  @brief adds a directory if we are the CMAKE_SOURCE_DIR
 #
 #  @param dir  The directory location.
