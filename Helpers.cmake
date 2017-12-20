@@ -36,18 +36,19 @@ macro(force_option option value)
 endmacro()
 
 ##
-#  @brief adds a subdirectory if we are the CMAKE_SOURCE_DIR
+#  @brief Adds a subdirectory if the target does not exist.
 #
-#  @param dir  The directory location.
+#  @param dir    The directory location.
+#  @param target The targt to check.
 #
-macro(add_subdirectory_safe dir)
-  if(${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
+macro(add_subdirectory_safe dir target)
+  if(NOT TARGET ${target})
     add_subdirectory(${dir})
   endif()
 endmacro()
 
 ##
-#  @brief adds a directory if we are the CMAKE_SOURCE_DIR
+#  @brief Adds a directory if we are the CMAKE_SOURCE_DIR
 #
 #  @param dir  The directory location.
 #  @param dest The build directory destination.
