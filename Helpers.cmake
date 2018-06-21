@@ -62,7 +62,7 @@ endmacro()
 ##
 #  @brief Adds a test and creates an executable.
 #
-#  @param name The executable to build.
+#  @param name The executable/test to add.
 #  @param ARGN The targets to link.
 #
 macro(define_test name)
@@ -79,6 +79,39 @@ macro(define_test name)
   if(${args_size} GREATER 0)
     target_link_libraries(${name} ${ARGN})
   endif()
+endmacro()
+
+##
+#  @brief Convenient define_test wrapper for gtest tests.
+#
+#  @param name The executable to build.
+#  @param ARGN The targets to link.
+#
+macro(add_gtest name)
+  define_test(${name} gtest gtest_main ${ARGN})
+endmacro()
+
+##
+#  @brief Changes the default Visual Studio compiler flags
+#         to static version of the run-time library. 
+#
+macro(msvc_static_lib)
+  if(MSVC)
+    # https://stackoverflow.com/questions/14172856
+
+    set(
+      ALL_CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_CXX_FLAGS_RELEASE
+    )
+
+    foreach(flag ${ALL_CMAKE_CXX_FLAGS})
+      string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
+      set(${flag} "${${flag}} /std:c++latest")
+    endforeach()
+  endif()
+
 endmacro()
 
 # end Helpers.cmake
