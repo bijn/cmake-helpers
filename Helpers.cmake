@@ -59,5 +59,27 @@ macro(add_directory dir dest)
   endif()
 endmacro()
 
+##
+#  @brief Adds a test and creates an executable.
+#
+#  @param name The executable to build.
+#  @param ARGN The targets to link.
+#
+macro(define_test name)
+  add_test(
+    NAME ${name}
+    COMMAND ${name}
+    WORKING_DIRECTORY ${UNIT_TEST_BIN_OUTPUT_DIR}
+  )
+
+  add_executable(${name} "${name}.cc")
+
+  set(args ${ARGN})
+  list(LENGTH args args_size)
+  if(${args_size} GREATER 0)
+    target_link_libraries(${name} ${ARGN})
+  endif()
+endmacro()
+
 # end Helpers.cmake
 
