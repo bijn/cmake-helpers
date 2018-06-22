@@ -1,7 +1,7 @@
 # Bijan Sondossi
 # cmake/Helpers.cmake
 
-## 
+##
 #  @brief Forces the default value of a variable using caching.
 #
 #  @param var   The variable to set.
@@ -12,7 +12,7 @@ macro(force var type value)
   set(${var} ${value} CACHE ${type} "" FORCE)
 endmacro()
 
-## 
+##
 #  @brief Forces the default value of a boolean variable using caching.
 #
 #  @param var   The variable to set.
@@ -22,7 +22,7 @@ macro(force_bool var value)
   force(${var} BOOL ${value})
 endmacro()
 
-## 
+##
 #  @brief Forces the default value of an option using caching.
 #
 #  @param option The option to set.
@@ -62,7 +62,8 @@ endmacro()
 ##
 #  @brief Adds a test and creates an executable.
 #
-#  @param name The executable/test to add.
+#  @param name The executable/test to add. Must be the same name as the
+#              source file.
 #  @param ARGN The targets to link.
 #
 macro(define_test name)
@@ -92,10 +93,10 @@ macro(add_gtest name)
 endmacro()
 
 ##
-#  @brief Changes the default Visual Studio compiler flags
-#         to static version of the run-time library. 
+#  @brief Changes the default Visual Studio compiler flags to static
+#         version of the run-time library.
 #
-macro(msvc_static_lib)
+macro(msvc_static_runtime)
   if(MSVC)
     # https://stackoverflow.com/questions/14172856
 
@@ -115,4 +116,3 @@ macro(msvc_static_lib)
 endmacro()
 
 # end Helpers.cmake
-
