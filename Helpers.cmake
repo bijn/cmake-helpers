@@ -70,7 +70,7 @@ macro(define_test name)
   add_test(
     NAME ${name}
     COMMAND ${name}
-    WORKING_DIRECTORY ${UNIT_TEST_BIN_OUTPUT_DIR}
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
   )
 
   add_executable(${name} "${name}.cc")
