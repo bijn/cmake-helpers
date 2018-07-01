@@ -93,6 +93,25 @@ macro(add_gtest name)
 endmacro()
 
 ##
+#  @brief Adds the /std:c++latest compiler flag.
+#  @todo See if there is a better way to do this.
+#
+macro(msvc_std_latest)
+  if(MSVC)
+    set(
+      ALL_CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS
+      CMAKE_CXX_FLAGS_DEBUG
+      CMAKE_CXX_FLAGS_RELEASE
+    )
+
+    foreach(flag ${ALL_CMAKE_CXX_FLAGS})
+      set(${flag} "${${flag}} /std:c++latest")
+    endforeach()
+  endif()
+endmacro()
+
+##
 #  @brief Changes the default Visual Studio compiler flags to static
 #         version of the run-time library.
 #
@@ -109,10 +128,8 @@ macro(msvc_static_runtime)
 
     foreach(flag ${ALL_CMAKE_CXX_FLAGS})
       string(REGEX REPLACE "/MD" "/MT" ${flag} "${${flag}}")
-      set(${flag} "${${flag}} /std:c++latest")
     endforeach()
   endif()
-
 endmacro()
 
 # end Helpers.cmake
