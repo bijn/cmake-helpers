@@ -41,7 +41,7 @@ endmacro()
 #  @param dir    The directory location.
 #  @param target The targt to check.
 #
-macro(add_subdirectory_safe dir target)
+macro(add_target_subdirectory dir target)
   if(NOT TARGET ${target})
     add_subdirectory(${dir})
   endif()
@@ -53,7 +53,7 @@ endmacro()
 #  @param dir  The directory location.
 #  @param dest The build directory destination.
 #
-macro(add_directory dir dest)
+macro(add_root_subdirectory dir dest)
   if(${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
     add_subdirectory(${dir} ${dest})
   endif()
@@ -62,18 +62,18 @@ endmacro()
 ##
 #  @brief Adds a test and creates an executable.
 #
-#  @param name The executable/test to add. Must be the same name as the
-#              source file.
+#  @param name The executable/test to add.
+#  @param file The test source file.
 #  @param ARGN The targets to link.
 #
-macro(define_test name)
+macro(add_test_w_libs name file)
   add_test(
     NAME ${name}
     COMMAND ${name}
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
   )
 
-  add_executable(${name} "${name}.cc")
+  add_executable(${name} ${file})
 
   set(args ${ARGN})
   list(LENGTH args args_size)
@@ -83,13 +83,33 @@ macro(define_test name)
 endmacro()
 
 ##
-#  @brief Convenient define_test wrapper for gtest tests.
+#  @brief add_test_with_libs wrapper for gtest tests.
 #
 #  @param name The executable to build.
+#  @param file The test source file.
 #  @param ARGN The targets to link.
 #
-macro(add_gtest name)
-  define_test(${name} gtest gtest_main ${ARGN})
+macro(add_gtest_w_libs name file)
+  add_test_w_libs(${name} ${file} gtest gtest_main ${ARGN})
+endmacro()
+
+##
+#  @brief add_test wrapper for gtests.
+#
+#  @param name The executable to build.
+#  @param file The test source file.
+#  @param ARGN Other sources.
+#
+macro(add_gtest name file)
+  add_test(
+    NAME ${name}
+    COMMAND ${name}
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+  )
+
+  add_executable(${name} ${file} ${ARGN})
+
+  target_link_libraries(${name} gtest gtest_main)
 endmacro()
 
 ##
