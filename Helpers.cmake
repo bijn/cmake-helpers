@@ -152,4 +152,24 @@ macro(msvc_static_runtime)
   endif()
 endmacro()
 
+##
+#  @brief Links libraries to target marking header files as system
+#         headers to suppress warnings.
+#
+#  @param target The target to link against.
+#  @param ARGN The libraries to mark and link.
+#
+#  @see   https://stackoverflow.com/questions/51816807
+#
+function(target_link_libraries_system target)
+  set(libs ${ARGN})
+  foreach(lib ${libs})
+    get_target_property(
+      lib_include_dirs ${lib} INTERFACE_INCLUDE_DIRECTORIES)
+    target_include_directories(
+      ${target} SYSTEM PRIVATE ${lib_include_dirs})
+    target_link_libraries(${target} ${lib})
+  endforeach(lib)
+endfunction(target_link_libraries_system)
+
 # end Helpers.cmake
